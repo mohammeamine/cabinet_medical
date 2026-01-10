@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Rendez-vous | MediCare+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Détails du Rendez-vous</h1>
+            <p class="text-gray-600">Informations complètes</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="{{ path('app_admin_rendez_vous_edit', {id: rendez_vous.id}) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-semibold transition">
+                Modifier
+            </a>
+            <a href="{{ path('app_admin_rendez_vous_index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-md font-semibold transition">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Patient</label>
+                <p class="text-lg text-gray-900">{{ rendez_vous.patient.prenom }} {{ rendez_vous.patient.nom }}</p>
+                <p class="text-sm text-gray-500">{{ rendez_vous.patient.email }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Médecin</label>
+                <p class="text-lg text-gray-900">{{ rendez_vous.medecin.prenom }} {{ rendez_vous.medecin.nom }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Date</label>
+                <p class="text-lg text-gray-900">{{ rendez_vous.date|date('d/m/Y') }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Heure</label>
+                <p class="text-lg text-gray-900">{{ rendez_vous.heure|date('H:i') }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Statut</label>
+                {% if rendez_vous.statut == 'scheduled' %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">Programmé</span>
+                {% elseif rendez_vous.statut == 'completed' %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Terminé</span>
+                {% elseif rendez_vous.statut == 'cancelled' %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">Annulé</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6">
+        <a href="{{ path('app_admin_rendez_vous_delete', {id: rendez_vous.id}) }}" class="text-red-600 hover:text-red-800 font-medium">
+            Supprimer ce rendez-vous →
+        </a>
+    </div>
+</div>
+{% endblock %}
+

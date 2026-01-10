@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Patient | MediCare+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Détails du Patient</h1>
+            <p class="text-gray-600">Informations complètes</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="{{ path('app_admin_patient_edit', {id: patient.id}) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-semibold transition">
+                Modifier
+            </a>
+            <a href="{{ path('app_admin_patient_index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-md font-semibold transition">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Prénom</label>
+                <p class="text-lg text-gray-900">{{ patient.prenom }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Nom</label>
+                <p class="text-lg text-gray-900">{{ patient.nom }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
+                <p class="text-lg text-gray-900">{{ patient.email }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">Téléphone</label>
+                <p class="text-lg text-gray-900">{{ patient.tele }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6">
+        <a href="{{ path('app_admin_patient_delete', {id: patient.id}) }}" class="text-red-600 hover:text-red-800 font-medium">
+            Supprimer ce patient →
+        </a>
+    </div>
+</div>
+{% endblock %}
+

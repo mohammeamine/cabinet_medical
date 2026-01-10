@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil | MediCare+{% endblock %}
+
+{% block body %}
+<section id="home" class="py-20 bg-white">
+    <div class="container mx-auto px-4 text-center">
+        <span class="text-blue-600 font-bold text-sm tracking-widest uppercase mb-4 block">
+            Bienvenue sur MediCare+
+        </span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
+            Votre cabinet médical <br>
+            <span class="text-blue-600">au service des patients et médecins</span>
+        </h1>
+        <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Gérez vos patients, rendez-vous et consultations en toute simplicité.
+        </p>
+        <div class="flex flex-col md:flex-row justify-center gap-4">
+            <a href="{{ path('app_admin_dashboard') }}" class="bg-blue-600 text-white px-8 py-4 rounded-md font-bold hover:bg-blue-700 transition">
+                Accès Médecin / Admin
+            </a>
+            <a href="{{ path('app_patient_dashboard') }}" class="bg-white border border-gray-200 text-gray-700 px-8 py-4 rounded-md font-bold hover:bg-gray-50 transition">
+                Accès Patient
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Sections simples pour cohérence avec le thème -->
+<section id="features" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900">Fonctionnalités clés</h2>
+        <div class="w-16 h-1 bg-blue-600 mx-auto mt-4"></div>
+    </div>
+    <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-8 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-xl font-semibold mb-3">Gestion des Patients</h3>
+            <p class="text-gray-600">Création, édition, suivi des dossiers patients avec contacts.</p>
+        </div>
+        <div class="p-8 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-xl font-semibold mb-3">Rendez-vous</h3>
+            <p class="text-gray-600">Planification, modification et suivi des statuts des rendez-vous.</p>
+        </div>
+        <div class="p-8 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-xl font-semibold mb-3">Consultations</h3>
+            <p class="text-gray-600">Notes médicales, ordonnances et historique des consultations.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
