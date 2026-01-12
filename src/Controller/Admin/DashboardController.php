@@ -18,6 +18,8 @@ class DashboardController extends AbstractController
         ConsultationRepository $consultationRepository,
         RendezVousRepository $rendezVousRepository
     ): Response {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
         // Statistiques
         $totalPatients = $userRepository->createQueryBuilder('u')
             ->select('COUNT(u.id)')

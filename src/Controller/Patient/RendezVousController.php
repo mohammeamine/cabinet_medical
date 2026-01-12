@@ -13,20 +13,13 @@ class RendezVousController extends AbstractController
 {
     #[Route('', name: 'app_patient_rendez_vous_index', methods: ['GET'])]
     public function index(
-        RendezVousRepository $rendezVousRepository,
-        UserRepository $userRepository
+        RendezVousRepository $rendezVousRepository
     ): Response {
-        // Pour l'instant, récupérer le premier patient (sans auth)
-        $patient = $userRepository->createQueryBuilder('u')
-            ->where('u.roles LIKE :role')
-            ->setParameter('role', '%ROLE_PATIENT%')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (!$patient) {
-            throw $this->createNotFoundException('Aucun patient trouvé');
-        }
+        // Vérifier que l'utilisateur est connecté et est patient
+        $this->denyAccessUnlessGranted('ROLE_PATIENT');
+        
+        // Utiliser le patient connecté
+        $patient = $this->getUser();
 
         $rendezVous = $rendezVousRepository->createQueryBuilder('r')
             ->where('r.patient = :patient')

@@ -18,6 +18,8 @@ class ConsultationController extends AbstractController
     #[Route('', name: 'app_admin_consultation_index', methods: ['GET'])]
     public function index(ConsultationRepository $consultationRepository): Response
     {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
         $consultations = $consultationRepository->findBy([], ['date' => 'DESC']);
 
         return $this->render('admin/consultation/index.html.twig', [
@@ -28,22 +30,16 @@ class ConsultationController extends AbstractController
     #[Route('/new', name: 'app_admin_consultation_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository
+        EntityManagerInterface $entityManager
     ): Response {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
+        
         $consultation = new Consultation();
         
-        // Récupérer le premier médecin (pour l'instant, sans auth)
-        $medecin = $userRepository->createQueryBuilder('u')
-            ->where('u.roles LIKE :role')
-            ->setParameter('role', '%ROLE_MEDECIN%')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if ($medecin) {
-            $consultation->setMedecin($medecin);
-        }
+        // Utiliser le médecin connecté
+        $medecin = $this->getUser();
+        $consultation->setMedecin($medecin);
 
         $form = $this->createForm(ConsultationType::class, $consultation);
         $form->handleRequest($request);

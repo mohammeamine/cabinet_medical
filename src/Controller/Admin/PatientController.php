@@ -18,6 +18,8 @@ class PatientController extends AbstractController
     #[Route('', name: 'app_admin_patient_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
         $patients = $userRepository->createQueryBuilder('u')
             ->where('u.roles LIKE :role')
             ->setParameter('role', '%ROLE_PATIENT%')

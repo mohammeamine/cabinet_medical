@@ -19,6 +19,8 @@ class RendezVousController extends AbstractController
     #[Route('', name: 'app_admin_rendez_vous_index', methods: ['GET'])]
     public function index(RendezVousRepository $rendezVousRepository): Response
     {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
         $rendezVous = $rendezVousRepository->findBy([], ['date' => 'DESC', 'heure' => 'DESC']);
 
         return $this->render('admin/rendez_vous/index.html.twig', [
@@ -29,22 +31,16 @@ class RendezVousController extends AbstractController
     #[Route('/new', name: 'app_admin_rendez_vous_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository
+        EntityManagerInterface $entityManager
     ): Response {
+        // Vérifier que l'utilisateur est connecté et est médecin
+        $this->denyAccessUnlessGranted('ROLE_MEDECIN');
+        
         $rendezVous = new RendezVous();
         
-        // Récupérer le premier médecin (pour l'instant, sans auth)
-        $medecin = $userRepository->createQueryBuilder('u')
-            ->where('u.roles LIKE :role')
-            ->setParameter('role', '%ROLE_MEDECIN%')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if ($medecin) {
-            $rendezVous->setMedecin($medecin);
-        }
+        // Utiliser le médecin connecté
+        $medecin = $this->getUser();
+        $rendezVous->setMedecin($medecin);
 
         // Définir le statut par défaut à "scheduled" lors de la création
         $rendezVous->setStatut('scheduled');

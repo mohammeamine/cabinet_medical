@@ -13,20 +13,13 @@ class ConsultationController extends AbstractController
 {
     #[Route('', name: 'app_patient_consultation_index', methods: ['GET'])]
     public function index(
-        ConsultationRepository $consultationRepository,
-        UserRepository $userRepository
+        ConsultationRepository $consultationRepository
     ): Response {
-        // Pour l'instant, récupérer le premier patient (sans auth)
-        $patient = $userRepository->createQueryBuilder('u')
-            ->where('u.roles LIKE :role')
-            ->setParameter('role', '%ROLE_PATIENT%')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (!$patient) {
-            throw $this->createNotFoundException('Aucun patient trouvé');
-        }
+        // Vérifier que l'utilisateur est connecté et est patient
+        $this->denyAccessUnlessGranted('ROLE_PATIENT');
+        
+        // Utiliser le patient connecté
+        $patient = $this->getUser();
 
         $consultations = $consultationRepository->createQueryBuilder('c')
             ->where('c.patient = :patient')

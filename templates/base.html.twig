@@ -27,14 +27,33 @@
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-8 font-medium text-gray-500 text-sm uppercase tracking-wide">
-                    <a href="#home" class="hover:text-blue-600">Accueil</a>
-                    <a href="#specialties" class="hover:text-blue-600">Spécialités</a>
-                    <a href="#doctors" class="hover:text-blue-600">Médecins</a>
-                    <a href="#contact" class="hover:text-blue-600">Contact</a>
+                    {% if app.user %}
+                        {% if 'ROLE_MEDECIN' in app.user.roles %}
+                            <a href="{{ path('app_admin_dashboard') }}" class="hover:text-blue-600">Dashboard</a>
+                            <a href="{{ path('app_admin_patient_index') }}" class="hover:text-blue-600">Patients</a>
+                            <a href="{{ path('app_admin_rendez_vous_index') }}" class="hover:text-blue-600">Rendez-vous</a>
+                            <a href="{{ path('app_admin_consultation_index') }}" class="hover:text-blue-600">Consultations</a>
+                        {% elseif 'ROLE_PATIENT' in app.user.roles %}
+                            <a href="{{ path('app_patient_dashboard') }}" class="hover:text-blue-600">Mon Tableau de bord</a>
+                            <a href="{{ path('app_patient_rendez_vous_index') }}" class="hover:text-blue-600">Mes Rendez-vous</a>
+                            <a href="{{ path('app_patient_consultation_index') }}" class="hover:text-blue-600">Mes Consultations</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('app_home') }}" class="hover:text-blue-600">Accueil</a>
+                    {% endif %}
                 </nav>
-                <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-semibold text-sm transition">
-                    LOGIN
-                </a>
+                <div class="flex items-center gap-4">
+                    {% if app.user %}
+                        <span class="text-gray-600 text-sm">{{ app.user.prenom }} {{ app.user.nom }}</span>
+                        <a href="{{ path('app_logout') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold text-sm transition">
+                            Déconnexion
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-semibold text-sm transition">
+                            Connexion
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </header>
 
